@@ -1,4 +1,15 @@
-# Retail Big Data Agent
+# Conversational Analytics Demo
+
+This is a conversational analytics demo code shared by Puneet and Pawan Rana, with modifications to work locally.
+
+## What's Changed
+- Used Chicago taxi trips from public BigQuery datasets
+- Updated utility functions to use this data source  
+- Updated instructions.yaml with taxi_trips schema information and example queries
+- Removed dependency on Dataplex metadata to work locally
+- Added function in utility to get table metadata
+- Fixed entrypoint.sh to include frontend build step
+
 ![](frontend/src/assets/archi.png)
 This project is a data agent application with a React frontend and a Python backend. The agent leverages custom tools to interact with data and provide insights.
 
