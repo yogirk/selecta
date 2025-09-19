@@ -1,6 +1,6 @@
 // App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css'; // Ensure this global CSS is imported
 
 // Import your components
@@ -32,8 +32,8 @@ function App() {
           {/* Main content area where routed pages will be displayed */}
           <main className="App-main-content">
             <Routes>
-              {/* Default route, e.g., to ChatInterface */}
-              <Route path="/" element={<ChatInterface />} />
+              {/* Redirect root path to the canonical chat path */}
+              <Route path="/" element={<Navigate replace to="/chat" />} />
               {/* Route to DataPreview page */}
               <Route path="/data-preview" element={<DataPreview />} />
               {/* Route to SolutionArchitecture page */}

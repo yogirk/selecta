@@ -4,13 +4,8 @@
 set -e
 
 # --- Frontend Build ---
-echo "Checking for frontend dependencies..."
-cd frontend
-npm install
-echo "Building frontend application..."
-npm run build
-cd ..
-echo "Frontend build complete."
+# Frontend is already built during Docker image creation
+echo "Frontend already built during image creation. Skipping frontend build."
 
 # --- Load Environment Variables ---
 # Load variables from .env file if it exists

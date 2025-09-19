@@ -4,10 +4,10 @@
 # Define App identifiers and corresponding Cloud Run Service Names
 APP_IDENTIFIER="app" # Argument for Flask app
 
-APP_SERVICE_NAME=""   # Cloud Run service name for the Flask app
+APP_SERVICE_NAME="datawise-app"   # <-- SET YOUR CLOUD RUN SERVICE NAME
 # Define components of the image name
-GCP_REGION="us-central1"
-ARTIFACT_REGISTRY_REPO="" # CHANGE IF YOUR REPO NAME IS DIFFERENT
+GCP_REGION="asia-east1"
+ARTIFACT_REGISTRY_REPO="datawise-repo" # <-- SET YOUR ARTIFACT REGISTRY REPO NAME
 IMAGE_NAME="main-app" # Name of the image itself
 TAG="latest"
 # Note: MAIN_IMAGE_NAME is now constructed later, after PROJECT_ID is confirmed
@@ -89,6 +89,26 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Cloud Build finished successfully."
+
+# === Fetch IAP Secrets ===
+echo "Fetching IAP OAuth Client ID from Secret Manager..."
+OAUTH_CLIENT_ID=$(gcloud secrets versions access latest --secret="datawise-oauthclientid" --project="$PROJECT_ID")
+
+if [ -z "$OAUTH_CLIENT_ID" ]; then
+    echo "Error: Failed to fetch 'datawise-oauthclientid' from Secret Manager."
+    echo "Please ensure the secret exists in project '$PROJECT_ID' and you have the 'Secret Manager Secret Accessor' role."
+    exit 1
+fi
+
+echo "Fetching IAP OAuth Client Secret from Secret Manager..."
+OAUTH_SECRET=$(gcloud secrets versions access latest --secret="datawise-oauth-secret" --project="$PROJECT_ID")
+
+# Check if secret was fetched successfully
+if [ -z "$OAUTH_SECRET" ]; then
+    echo "Error: Failed to fetch 'datawise-oauth-secret' from Secret Manager."
+    echo "Please ensure the secret exists in project '$PROJECT_ID' and you have the 'Secret Manager Secret Accessor' role."
+    exit 1
+fi
 
 # === Deploy to Cloud Run ===
 echo "Deploying image $MAIN_IMAGE_NAME to Cloud Run service $CLOUDRUN_SERVICE_NAME..."

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import remarkGfm from 'remark-gfm';
 import './ChatInterface.css';
 
@@ -58,7 +60,7 @@ const suggestedQuestions = [
 
 const ChatInterface = () => {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I am Retail DataWise. I can answer business questions over your BigQuery data. How can I assist you today?", sender: 'bot', timestamp: new Date() }
+    { id: 1, text: "I'm DataWise, your AI agent for answering business questions over BigQuery data. How can I assist you today?", sender: 'bot', timestamp: new Date() }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -180,12 +182,14 @@ const ChatInterface = () => {
         {isLoading && messages[messages.length - 1]?.sender === 'user' && <TypingIndicator />} {/* Conditionally render typing indicator */}
         <div ref={messagesEndRef} />
       </div>
-      <div className="suggested-questions">
+       <div className="suggested-questions">
+        <FontAwesomeIcon icon={faLightbulb} className="suggested-questions-icon" title="Suggested Questions" />
         {suggestedQuestions.map((suggestion, index) => (
           <div
             key={index}
             className="suggestion-card"
             onClick={() => handleSuggestionClick(suggestion.question)}
+            title={suggestion.question} // This adds the hover-to-view tooltip
           >
             <h4>{suggestion.heading}</h4>
             <p>{suggestion.question}</p>
