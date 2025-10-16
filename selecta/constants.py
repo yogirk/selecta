@@ -29,3 +29,15 @@ DEFAULT_DATASET_CONFIG_PATH = (
     or os.getenv("DATA_AGENT_DATASET_CONFIG")
     or str(_PACKAGE_ROOT / "datasets" / "thelook.yaml")
 )
+
+
+def _env_bool(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+AUTO_VIZ_ENABLED = _env_bool("SELECTA_AUTOVISUALIZE", True)
+VIZ_MAX_ROWS = int(os.getenv("SELECTA_VIZ_MAX_ROWS", "500"))
+VIZ_MAX_DISTINCT = int(os.getenv("SELECTA_VIZ_MAX_DISTINCT", "20"))

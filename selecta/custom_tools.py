@@ -22,6 +22,7 @@ from google.cloud import bigquery
 
 from . import storage
 from .config_loader import get_bigquery_settings
+from .visualization import build_chart_spec
 
 logging.basicConfig(
     level=logging.INFO,
@@ -62,6 +63,7 @@ def execute_bigquery_query(sql_query: str, tool_context: Optional[Any] = None) -
         data = [dict(row.items()) for row in rows]
         normalized = _normalize_rows(data)
         logger.info("Query returned %d rows in %.2f seconds", len(data), time.time() - start_time)
+        chart_spec = build_chart_spec(normalized)
 
         if tool_context is not None:
             invocation_context = getattr(tool_context, "_invocation_context", None)
@@ -75,6 +77,7 @@ def execute_bigquery_query(sql_query: str, tool_context: Optional[Any] = None) -
                     user_id=user_id,
                     sql_query=sql_query,
                     rows=normalized,
+                    chart=chart_spec,
                 )
                 tool_context.state["latest_query_result_id"] = result_id
 

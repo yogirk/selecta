@@ -9,6 +9,10 @@ import yaml
 from .constants import DEFAULT_DATASET_CONFIG_PATH, MODEL
 
 
+_PACKAGE_ROOT = Path(__file__).resolve().parent
+_DATASET_DIR = (_PACKAGE_ROOT / "datasets").resolve()
+
+
 @dataclass(frozen=True)
 class BigQuerySettings:
     billing_project_id: str
@@ -32,6 +36,23 @@ class DatasetConfig:
     model: str
     bigquery: BigQuerySettings
     prompt: PromptSettings
+    path: Path
+
+
+@dataclass(frozen=True)
+class DatasetDescriptor:
+    id: str
+    display_name: Optional[str]
+    description: Optional[str]
+    model: str
+    path: Path
+
+
+_DATASET_CONFIG_OVERRIDE: Optional[Path] = None
+
+
+def _dataset_directory() -> Path:
+    return _DATASET_DIR
 
 
 def _resolve_path(base_path: Path, candidate: str) -> Path:
@@ -46,12 +67,28 @@ def _load_yaml(path: Path) -> Dict[str, Any]:
         return yaml.safe_load(handle)
 
 
-@lru_cache(maxsize=1)
-def get_dataset_config() -> DatasetConfig:
+def set_dataset_config_path(path: Path) -> None:
+    resolved = Path(path).expanduser().resolve()
+    if not resolved.exists():
+        raise FileNotFoundError(f"Dataset configuration file not found: {resolved}")
+    global _DATASET_CONFIG_OVERRIDE
+    _DATASET_CONFIG_OVERRIDE = resolved
+    os.environ["SELECTA_DATASET_CONFIG"] = str(resolved)
+    get_dataset_config.cache_clear()
+
+
+def get_active_dataset_path() -> Path:
+    if _DATASET_CONFIG_OVERRIDE:
+        return _DATASET_CONFIG_OVERRIDE
     config_path_env = os.getenv("SELECTA_DATASET_CONFIG") or os.getenv(
         "DATA_AGENT_DATASET_CONFIG", DEFAULT_DATASET_CONFIG_PATH
     )
-    config_path = Path(config_path_env).expanduser().resolve()
+    return Path(config_path_env).expanduser().resolve()
+
+
+@lru_cache(maxsize=1)
+def get_dataset_config() -> DatasetConfig:
+    config_path = get_active_dataset_path()
     if not config_path.exists():
         raise FileNotFoundError(f"Dataset configuration file not found: {config_path}")
 
@@ -85,6 +122,7 @@ def get_dataset_config() -> DatasetConfig:
         model=model,
         bigquery=bigquery,
         prompt=prompt,
+        path=config_path,
     )
 
 
@@ -98,3 +136,37 @@ def get_prompt_settings() -> PromptSettings:
 
 def get_model() -> str:
     return get_dataset_config().model
+
+
+def list_dataset_descriptors() -> List[DatasetDescriptor]:
+    descriptors: List[DatasetDescriptor] = []
+    dataset_dir = _dataset_directory()
+    if not dataset_dir.exists():
+        return descriptors
+
+    for path in sorted(dataset_dir.glob("*.ya?ml")):
+        try:
+            raw = _load_yaml(path)
+        except Exception:
+            continue
+        descriptors.append(
+            DatasetDescriptor(
+                id=(raw.get("id") or path.stem),
+                display_name=raw.get("display_name"),
+                description=raw.get("description"),
+                model=raw.get("model") or MODEL,
+                path=path.resolve(),
+            )
+        )
+    return descriptors
+
+
+def get_active_dataset_descriptor() -> DatasetDescriptor:
+    config = get_dataset_config()
+    return DatasetDescriptor(
+        id=config.id or config.path.stem,
+        display_name=config.display_name,
+        description=config.description,
+        model=config.model,
+        path=config.path,
+    )
