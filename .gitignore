@@ -1,1 +1,16 @@
-# This is a .gitignore file
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.db
+uv.lock
+*.egg-info/
+
+# Node.js
+node_modules/
+frontend/
+
+# OS artifacts
+.DS_Store
+.env

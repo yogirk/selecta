@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Your project name. It acts as a unique identifier.
 export PROJECT_NAME=cloudside-academy
 # Your GCP Project ID
