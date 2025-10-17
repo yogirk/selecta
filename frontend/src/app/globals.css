@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: 210 40% 96%;
+  --color-foreground: 222.2 32% 14%;
+  --color-card: 0 0% 100%;
+  --color-card-foreground: 222.2 32% 14%;
+  --color-popover: 0 0% 100%;
+  --color-popover-foreground: 222.2 32% 14%;
+  --color-primary: 262.1 83.3% 57.8%;
+  --color-primary-foreground: 0 0% 100%;
+  --color-secondary: 214 31% 92%;
+  --color-secondary-foreground: 222.2 32% 20%;
+  --color-muted: 214 31% 92%;
+  --color-muted-foreground: 220 15% 46%;
+  --color-accent: 214 31% 92%;
+  --color-accent-foreground: 222.2 32% 14%;
+  --color-destructive: 0 72% 51%;
+  --color-destructive-foreground: 210 40% 98%;
+  --color-border: 214 28% 86%;
+  --color-input: 214 28% 86%;
+  --color-ring: 262.1 83.3% 57.8%;
+  --radius: 0.5rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: hsl(var(--color-background));
+  color: hsl(var(--color-foreground));
+  font-feature-settings: "rlig" 1, "calt" 1;
+  font-family: var(--font-geist-sans), "Inter", system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--color-primary) / 0.4)
+    hsl(var(--color-card) / 0.1);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--color-primary) / 0.4);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--color-ring) / 0.5);
+}
+
+.surface-panel {
+  background-color: hsl(var(--color-card) / 0.95);
+  border: 1px solid hsl(var(--color-border) / 0.18);
+  box-shadow:
+    0 26px 50px -30px hsl(var(--color-foreground) / 0.28),
+    0 10px 24px -22px hsl(var(--color-foreground) / 0.16);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-background: 220.9 39.3% 11%;
+  --color-foreground: 210 20% 98%;
+  --color-card: 215 27.9% 16.9%;
+  --color-card-foreground: 210 20% 98%;
+  --color-popover: 215 27.9% 16.9%;
+  --color-popover-foreground: 210 20% 98%;
+  --color-primary: 262.1 83.3% 57.8%;
+  --color-primary-foreground: 250 100% 97.6%;
+  --color-secondary: 216.9 19.1% 26.7%;
+  --color-secondary-foreground: 210 20% 98%;
+  --color-muted: 216.9 19.1% 26.7%;
+  --color-muted-foreground: 217.9 10.6% 64.9%;
+  --color-accent: 263.5 67.4% 34.9%;
+  --color-accent-foreground: 210 20% 98%;
+  --color-destructive: 0 72% 48%;
+  --color-destructive-foreground: 210 20% 98%;
+  --color-border: 216.9 19.1% 26.7%;
+  --color-input: 216.9 19.1% 26.7%;
+  --color-ring: 255.1 91.7% 76.3%;
+}
