@@ -29,41 +29,37 @@ export function ChatInput() {
   };
 
   return (
-    <div className="layer-surface border-t border-border-subtle px-6 py-4">
-      <Card className="card-elevated rounded-xl p-3 shadow-xl">
-        <div className="flex items-end gap-3">
-          <div className="flex-1">
-            <Textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask about your data, request forecasts, or run queries..."
-              className="min-h-[72px] resize-none border-0 bg-transparent px-0 text-sm text-card-foreground focus-visible:ring-0 focus-visible:outline-none"
-              disabled={isStreaming || !currentSessionId}
-            />
-          </div>
+    <div className="border-t border-border-subtle bg-[hsl(var(--surface))] px-6 py-4">
+      <Card className="rounded-2xl border border-border-subtle bg-card shadow-lg">
+        <div className="flex items-end gap-3 p-3">
+          <Textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Ask about your data, request forecasts, or run queries..."
+            className="min-h-[64px] flex-1 resize-none border border-border-subtle bg-card px-3 py-2 text-sm focus-visible:border-primary focus-visible:outline-none"
+            disabled={isStreaming || !currentSessionId}
+          />
           <Button
             onClick={handleSubmit}
             disabled={!input.trim() || isStreaming || !currentSessionId}
-            className="flex-shrink-0 rounded-lg bg-gradient-to-r from-[#a855f7] to-[#7c3aed] px-5 py-3 text-sm font-medium text-white shadow-md transition hover:from-[#9a4ff6] hover:to-[#6d28d9] disabled:opacity-50"
+            className="flex-shrink-0 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:opacity-50"
           >
             <span>Send</span>
             <Send className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
-        <div className="mt-3 flex items-center gap-3 text-xs text-muted-foreground">
-          <Button variant="ghost" size="sm" className="h-auto gap-1 rounded-lg bg-transparent px-0 py-0 text-muted-foreground hover:text-foreground">
+        <div className="flex items-center gap-3 px-3 pb-3 text-xs text-muted-foreground">
+          <Button variant="ghost" size="sm" className="h-auto gap-1 px-0 py-0 text-muted-foreground hover:text-foreground">
             <Paperclip className="h-3 w-3" />
             Attach file
           </Button>
-          <Button variant="ghost" size="sm" className="h-auto gap-1 rounded-lg bg-transparent px-0 py-0 text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="sm" className="h-auto gap-1 px-0 py-0 text-muted-foreground hover:text-foreground">
             <Code className="h-3 w-3" />
             SQL editor
           </Button>
-          <span className="ml-auto text-muted-foreground/80">
-            Press Enter to send
-          </span>
+          <span className="ml-auto text-muted-foreground">Press Enter to send</span>
         </div>
       </Card>
     </div>

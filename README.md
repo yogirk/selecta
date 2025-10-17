@@ -1,11 +1,11 @@
 # Selecta Monorepo
 
-This repository contains the Selecta backend agent (Google ADK) and frontend work-in-progress. The backend now exposes the standard ADK API server, so clients integrate directly with ADK’s REST + SSE contract. The existing Next.js frontend is being retired; a fresh UI will be built on top of the new contract.
+This repository contains the Selecta backend agent (Google ADK) and the redesigned Selecta frontend. The backend exposes the standard ADK REST + SSE contract, and the Next.js/Shadcn frontend consumes that API directly.
 
 ## Project Layout
 
 - `backend/` – Google ADK agent, configuration, and tooling. See `backend/README.md` for setup.
-- `frontend/` – placeholder workspace for the new UI (to be rebuilt).
+- `frontend/` – production Next.js app with the new glassmorphic, layered UI.
 - `roadmap.md` – shared roadmap across backend and frontend workstreams.
 - `selecta-3col-layout.html` – visual reference for the desired three-panel UI layout.
 
@@ -29,13 +29,29 @@ Refer to `backend/README.md` for more details (dataset configuration, optional p
 
 ## Frontend Status
 
-We are rebuilding the frontend from scratch to align with the ADK server contract. The `frontend/` directory currently serves as a staging area; no commands are provided yet.
+The new UI is live in `frontend/`:
+
+- Next.js App Router with TypeScript & Shadcn UI
+- Zustand store wired to ADK sessions + SSE streaming
+- Layered tone system (base → surface → elevated) with coordinated borders and shadows
+- Session rail, chat column, and analysis panel built to mirror the three-panel mock
+- Theme toggle with persisted preference and dark-mode palette parity
+
+### Quick Start
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Environment variables (`.env.local`) should point to the ADK server (defaults provided in `frontend/.env.local.example`).
 
 ## Contributing
 
 - Work from the appropriate workspace (`backend/` or `frontend/`) before installing dependencies or running commands.
-- Keep shared documentation up to date (roadmap, architectural notes).
-- When backend changes adjust ADK payloads, notify the frontend team and update integration code accordingly.
+- Keep documentation in sync (roadmap, frontend README, API contract).
+- When backend payloads change, update the frontend store/hooks and note it in `answers.md`.
 
 ## License
 

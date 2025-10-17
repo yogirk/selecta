@@ -10,45 +10,42 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="layer-surface sticky top-0 z-20 flex items-center justify-between border-b border-border px-6 py-3 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.25)]">
-      <div className="flex items-center gap-4">
+    <header className="border-b border-border-subtle bg-[hsl(var(--surface))/0.8] backdrop-blur-sm">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#a855f7] via-[#9333ea] to-[#7c3aed] text-white shadow-md">
-            <Sparkles className="h-5 w-5" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-sm">
+            <Sparkles className="h-5 w-5 text-primary-foreground" />
           </div>
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">Selecta</h1>
+          <div className="flex flex-col">
+            <h1 className="text-lg font-semibold text-foreground">Selecta</h1>
             <p className="text-xs text-muted-foreground">AI Analytics Platform</p>
           </div>
         </div>
-      </div>
-      <div className="flex items-center gap-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleTheme}
-          className="rounded-lg text-muted-foreground hover:text-foreground"
-          aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-        >
-          {theme === 'dark' ? (
-            <SunMedium className="h-5 w-5" />
-          ) : (
-            <Moon className="h-5 w-5" />
-          )}
-        </Button>
-        <Badge variant="outline" className="gap-2 rounded-full border-border/20 bg-card/70 px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
-          <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
-          <span>BigQuery Connected</span>
-        </Badge>
-        <Button variant="outline" size="sm" className="rounded-lg gap-2 bg-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground">
-          <Settings className="mr-2 h-4 w-4" />
-          Settings
-        </Button>
-        <Avatar className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow-md">
-          <AvatarFallback className="text-sm font-semibold text-primary-foreground">
-            U
-          </AvatarFallback>
-        </Avatar>
+
+        <div className="flex items-center gap-3">
+          <Badge variant="outline" className="gap-2 rounded-full border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-primary" />
+            BigQuery Connected
+          </Badge>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTheme}
+            className="rounded-lg text-muted-foreground hover:text-foreground"
+            aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          >
+            {theme === 'dark' ? <SunMedium className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          </Button>
+
+          <Button variant="ghost" size="icon" className="rounded-lg text-muted-foreground hover:text-foreground">
+            <Settings className="h-5 w-5" />
+          </Button>
+
+          <Avatar className="h-9 w-9 border border-border-subtle">
+            <AvatarFallback className="bg-primary/15 text-sm font-semibold text-primary">U</AvatarFallback>
+          </Avatar>
+        </div>
       </div>
     </header>
   );

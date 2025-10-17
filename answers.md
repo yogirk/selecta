@@ -101,3 +101,17 @@
 - Suggestions arrive via `actions.stateDelta` in streaming events (currently the backend seeds them as placeholders).
 - Inspect `stateDelta` for fields like `suggestions` or entries within `results_history`.
 - No separate endpoint today; render whatever the backend includes.
+
+## 8. UI Theme Reference
+
+- Light mode tonal stack:
+  - `--background` (`layer-base`) — `hsl(240 10% 98%)` → `#F9F9FA`
+  - `--surface` (`layer-surface`) — `hsl(240 10% 97%)` → `#F5F5F7`
+  - `--card` (`card-elevated`) — `hsl(0 0% 100%)` → `#FFFFFF`
+  - Borders: `border-border` = `#E4E4E7`, `border-border-subtle` = `#E9E9EC`
+- Dark mode tonal stack:
+  - `--background` — `hsl(222 46% 11%)` → `#101728`
+  - `--surface` — `hsl(222 38% 16%)` → `#1B2335`
+  - `--card` — `hsl(222 32% 20%)` → `#27334D`
+  - Borders: `border-border` = `#35415A`, `border-border-subtle` = `#2D384D`
+- Component helpers live in `src/styles/design-system.css`. Use `card-elevated`, `session-card`, `analysis-panel`, etc. to stay on spec.

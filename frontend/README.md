@@ -65,6 +65,13 @@ src/
 - **Charts**: Vega-Lite + React-Vega
 - **Icons**: Lucide React
 
+## Design System
+
+- Three-tier palette (`--background`, `--surface`, `--card`) structured in `src/app/globals.css` creates base → surface → elevated layers for both light and dark mode.  The corresponding hex values today are `#F9F9FA`, `#F5F5F7`, `#FFFFFF` (light) and `#101728`, `#1B2335`, `#27334D` (dark).
+- Component helpers in `src/styles/design-system.css` (`card-elevated`, `session-card`, `analysis-panel`, etc.) combine the right background tone, subtle border (`border-border` → `#E4E4E7` / `#35415A`), and shadows for glassmorphic elevation.
+- `ThemeProvider` persists the user’s preference (local storage) and toggles the `data-theme` attribute so the Tailwind tokens above switch automatically.
+- When creating new UI, pick the appropriate layer (base, surface, elevated) instead of directly applying `bg-white`; this keeps hierarchy consistent.
+
 ## Environment Variables
 
 \`\`\`env

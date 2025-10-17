@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Plus, PanelLeftClose } from 'lucide-react';
+import { Plus, PanelLeftClose, MessageSquare } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { apiClient } from '@/lib/api';
 import { getUserId, generateId, formatTimestamp } from '@/lib/utils';
@@ -65,97 +65,77 @@ export function SessionList({ onCollapse }: SessionListProps) {
   };
 
   return (
-    <aside className="layer-surface hidden h-full w-72 shrink-0 flex-col border-r border-border shadow-[0_20px_60px_-40px_rgba(15,23,42,0.25)] lg:flex">
-      <div className="flex items-center gap-2 border-b border-border-subtle p-4">
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={createNewSession}
-            className="flex-1 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#7c3aed] text-white shadow-md transition hover:from-[#9a4ff6] hover:to-[#6d28d9]"
-          >
-            <Plus className="mr-2 h-5 w-5" />
-            New Session
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onCollapse}
-            className="rounded-lg text-muted-foreground hover:text-foreground"
-            aria-label="Collapse recent sessions"
-          >
-            <PanelLeftClose className="h-5 w-5" />
-          </Button>
-        </div>
+    <div className="hidden h-full w-72 flex-col border-r border-border-subtle bg-[hsl(var(--surface))] lg:flex">
+      <div className="flex items-center justify-between border-b border-border-subtle px-4 py-4">
+        <h2 className="text-sm font-semibold text-foreground">Sessions</h2>
+        <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={onCollapse}>
+          <PanelLeftClose className="h-4 w-4" />
+        </Button>
       </div>
 
-      <div className="flex-1 overflow-hidden p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
-            Recent Sessions
-          </h3>
-          <span className="text-[10px] text-muted-foreground/80">{sessions.length.toString().padStart(2, '0')}</span>
-        </div>
+      <div className="px-4 py-3">
+        <Button
+          onClick={createNewSession}
+          className="w-full gap-2 rounded-lg bg-primary text-primary-foreground shadow-xs hover:bg-primary/90"
+        >
+          <Plus className="h-4 w-4" />
+          New Session
+        </Button>
+      </div>
 
-        <ScrollArea className="h-full pr-1">
-          <div className="space-y-3">
-            {sessions.map((session) => {
-              const isActive = session.id === currentSessionId;
-              const sessionLabel = session.events.length > 0 ? 'Active Session' : 'New Session';
-              return (
-                <div
-                  key={session.id}
-                  onClick={() => selectSession(session.id)}
-                  className={`session-card cursor-pointer p-4 ${
-                    isActive ? 'session-card-active' : ''
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h4 className="text-sm font-medium text-card-foreground">
-                        {sessionLabel}
-                      </h4>
-                      <p className="mt-1 text-xs text-muted-foreground truncate">
-                        {session.events.length > 0 ? `${session.events.length} messages` : 'No messages yet'}
-                      </p>
-                    </div>
-                    <span className="rounded-full bg-secondary/70 px-2 py-1 text-[10px] font-medium text-secondary-foreground">
-                      {formatTimestamp(session.lastUpdateTime)}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+      <ScrollArea className="flex-1">
+        <div className="space-y-3 px-4 pb-4">
+          <div className="flex items-center justify-between px-1 text-xs text-muted-foreground">
+            <span className="font-semibold uppercase tracking-[0.26em]">Recent Sessions</span>
+            <span className="font-mono">{sessions.length.toString().padStart(2, '0')}</span>
           </div>
-        </ScrollArea>
-      </div>
 
-      <div className="border-t border-border-subtle p-4">
-        <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
-          Quick Actions
-        </h3>
+          {sessions.map((session) => {
+            const isActive = session.id === currentSessionId;
+            const sessionLabel = session.events.length > 0 ? 'Active Session' : 'New Session';
+
+            return (
+              <button
+                key={session.id}
+                onClick={() => selectSession(session.id)}
+                className={`w-full rounded-lg border px-4 py-3 text-left transition-all ${
+                  isActive
+                    ? 'border-primary/50 bg-primary/15 text-primary shadow-lg shadow-primary/10'
+                    : 'border-border-subtle bg-card hover:border-border hover:bg-card/90'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium">{sessionLabel}</p>
+                    <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <MessageSquare className="h-3 w-3" />
+                      {session.events.length > 0 ? `${session.events.length} messages` : 'No messages yet'}
+                    </p>
+                  </div>
+                  <span className="rounded-full bg-secondary/60 px-2 py-1 text-[10px] font-medium text-secondary-foreground">
+                    {formatTimestamp(session.lastUpdateTime)}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </ScrollArea>
+
+      <div className="border-t border-border-subtle px-4 py-4">
+        <p className="mb-3 text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Quick Actions</p>
         <div className="space-y-2">
-          <Button
-            variant="ghost"
-            className="h-10 w-full justify-start gap-2 rounded-full border-0 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
-            size="sm"
-          >
+          <Button variant="outline" className="w-full justify-start text-sm hover:bg-primary/10 hover:text-primary">
             Browse Tables
           </Button>
-          <Button
-            variant="ghost"
-            className="h-10 w-full justify-start gap-2 rounded-full border-0 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
-            size="sm"
-          >
+          <Button variant="outline" className="w-full justify-start text-sm hover:bg-primary/10 hover:text-primary">
             Saved Queries
           </Button>
-          <Button
-            variant="ghost"
-            className="h-10 w-full justify-start gap-2 rounded-full border-0 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
-            size="sm"
-          >
+          <Button variant="outline" className="w-full justify-start text-sm hover:bg-primary/10 hover:text-primary">
             ML Models
           </Button>
         </div>
       </div>
-    </aside>
+    </div>
   );
 }

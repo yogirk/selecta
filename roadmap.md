@@ -37,6 +37,9 @@
 - Design new three-panel (or improved) layout with streaming updates and dataset controls.
 - Integrate structured insights/visualizations surfaced via ADK `stateDelta`.
 - Add smoke/e2e coverage once the new UI stabilises.
+- ✅ Layered tone system (base/surface/card) with theme toggle and glassmorphic elevations.
+- ✅ Chat, session rail, and results panel refactored to the new design language.
+- 🔄 Remaining polish: responsive tweaks, results tooling, dataset badge.
 
 ## 8. QA & Polish
 - Add unit tests for heuristics, suggestions, and Markdown parser.

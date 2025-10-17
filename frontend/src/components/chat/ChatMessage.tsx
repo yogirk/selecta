@@ -15,52 +15,51 @@ interface ChatMessageProps {
 export function ChatMessage({ message }: ChatMessageProps) {
   const { setActiveResult, activeResult } = useStore();
 
+  const isAssistant = message.role !== 'user';
   const isResultSelected = message.result && activeResult === message.result;
 
-  if (message.role === 'user') {
-    return (
-      <div className="animate-in slide-in-from-bottom-2 flex justify-end">
-        <div className="max-w-2xl">
-          <Card className="card-elevated rounded-2xl rounded-tr-none px-5 py-3 text-sm">
-            <p className="text-card-foreground whitespace-pre-wrap">{message.text}</p>
-          </Card>
-          <div className="mt-2 flex items-center justify-end gap-2">
-            <span className="text-xs text-muted-foreground/80">
-              {formatTimestamp(message.timestamp)}
-            </span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="animate-in slide-in-from-bottom-2 flex gap-4">
-      <Avatar className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-primary to-primary/70 shadow-md">
+    <div
+      className={`flex gap-3 animate-in fade-in ${isAssistant ? '' : 'flex-row-reverse text-right'}`}
+    >
+      <Avatar
+        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg ${
+          isAssistant ? 'bg-primary/20' : 'bg-accent/20'
+        }`}
+      >
         <AvatarFallback className="bg-transparent">
-          <Zap className="h-5 w-5 text-primary-foreground" />
+          {isAssistant ? <Zap className="h-4 w-4 text-primary" /> : <span className="h-3 w-3 rounded-full bg-accent" />}
         </AvatarFallback>
       </Avatar>
-      <div className="flex-1 max-w-3xl">
-        <Card className="card-elevated rounded-2xl rounded-tl-none p-5">
-          <p className="text-card-foreground whitespace-pre-wrap">{message.text}</p>
 
-          {message.result && (
+      <div className="flex-1 min-w-0">
+        <Card
+          className={`rounded-lg px-4 py-3 ${
+            isAssistant ? 'border border-border-subtle bg-card shadow-sm' : 'border border-primary/25 bg-primary/10'
+          }`}
+        >
+          <p className="text-sm text-foreground whitespace-pre-wrap">{message.text}</p>
+
+          {isAssistant && message.result && (
             <Button
               onClick={() => setActiveResult(message.result!)}
               variant={isResultSelected ? 'default' : 'outline'}
               size="sm"
-              className={`mt-4 flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium ${
+              className={`mt-3 gap-2 rounded-full px-3 py-1 text-xs ${
                 isResultSelected
-                  ? 'bg-black text-white shadow-md hover:bg-black/90'
-                  : 'border-border text-muted-foreground hover:border-primary hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'border-border-subtle text-muted-foreground hover:border-primary hover:text-foreground'
               }`}
             >
-              <Eye className="mr-2 h-4 w-4" />
-              {isResultSelected ? 'Viewing Results ✓' : 'View Results ↓'}
+              <Eye className="h-4 w-4" />
+              {isResultSelected ? 'Viewing Results' : 'View Results'}
             </Button>
           )}
         </Card>
+
+        <div className={`mt-2 flex items-center gap-2 text-xs text-muted-foreground ${isAssistant ? '' : 'justify-end'}`}>
+          {formatTimestamp(message.timestamp)}
+        </div>
       </div>
     </div>
   );
