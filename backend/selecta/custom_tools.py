@@ -20,7 +20,6 @@ from typing import Any, Dict, List, Optional
 
 from google.cloud import bigquery
 
-from . import storage
 from .config_loader import get_bigquery_settings
 from .visualization import build_chart_spec
 
@@ -66,20 +65,18 @@ def execute_bigquery_query(sql_query: str, tool_context: Optional[Any] = None) -
         chart_spec = build_chart_spec(normalized)
 
         if tool_context is not None:
-            invocation_context = getattr(tool_context, "_invocation_context", None)
-            session_obj = getattr(invocation_context, "session", None) if invocation_context else None
-            session_id = getattr(session_obj, "id", None)
-            user_id = getattr(invocation_context, "user_id", None) if invocation_context else None
-            if session_id:
-                storage.ensure_session(session_id, user_id)
-                result_id = storage.store_query_result(
-                    session_id=session_id,
-                    user_id=user_id,
-                    sql_query=sql_query,
-                    rows=normalized,
-                    chart=chart_spec,
-                )
-                tool_context.state["latest_query_result_id"] = result_id
+            columns = list(normalized[0].keys()) if normalized else []
+            result_payload = {
+                "sql": sql_query,
+                "rows": normalized,
+                "columns": columns,
+                "rowCount": len(normalized),
+                "chart": chart_spec,
+            }
+            tool_context.state["latest_result"] = result_payload
+            history: List[Dict[str, Any]] = list(tool_context.state.get("results_history", []))
+            history.append(result_payload)
+            tool_context.state["results_history"] = history
 
         return normalized
     except Exception as exc:  # pragma: no cover - defensive logging

@@ -33,10 +33,10 @@
 - Documented the event schema and payload examples in the README and API contract.
 
 ## 7. Frontend Implementation (Shadcn + Next.js)
-- Scaffold Next.js (App Router) with shadcn/ui + Tailwind.
-- Build three-panel layout (session sidebar, chat pane with streaming updates, bottom tabs for summary/results/visualization/SQL).
-- Integrate dataset dropdown, quick actions, and drill-down buttons.
-- Match mockup styling (dark mode, cards, motion) and add e2e smoke tests.
+- Rebuild UI from scratch on top of the ADK API server.
+- Design new three-panel (or improved) layout with streaming updates and dataset controls.
+- Integrate structured insights/visualizations surfaced via ADK `stateDelta`.
+- Add smoke/e2e coverage once the new UI stabilises.
 
 ## 8. QA & Polish
 - Add unit tests for heuristics, suggestions, and Markdown parser.

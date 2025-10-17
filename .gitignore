@@ -9,7 +9,9 @@ uv.lock
 
 # Node.js
 node_modules/
-frontend/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
 
 # OS artifacts
 .DS_Store

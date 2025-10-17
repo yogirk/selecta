@@ -16,6 +16,8 @@ _SECTION_HEADERS = {
     "business insights": "business_insights",
 }
 
+_PLAIN_HEADINGS = set(_SECTION_HEADERS.keys())
+
 _HEADING_PATTERN = re.compile(r"^#{1,6}\s+(?P<header>.+?)\s*$")
 
 
@@ -33,10 +35,21 @@ def parse_structured_sections(markdown: str) -> StructuredSections:
 
     current_section: Optional[str] = None
     for raw_line in markdown.splitlines():
-        match = _HEADING_PATTERN.match(raw_line)
+        stripped = raw_line.strip()
+        if not stripped:
+            if current_section:
+                sections[current_section].append("")
+            continue
+
+        match = _HEADING_PATTERN.match(stripped)
+        section_key: Optional[str] = None
         if match:
             normalised = _normalise_header(match.group("header"))
             section_key = _SECTION_HEADERS.get(normalised)
+        elif stripped.lower() in _PLAIN_HEADINGS:
+            section_key = _SECTION_HEADERS[stripped.lower()]
+
+        if section_key:
             current_section = section_key
             continue
 

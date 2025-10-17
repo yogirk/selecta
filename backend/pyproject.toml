@@ -18,9 +18,6 @@ dependencies = [
   "PyYAML>=6.0.0",
   "python-dotenv>=1.0.0",
   "proto-plus>=1.23.0",
-  "fastapi>=0.115.0",
-  "uvicorn[standard]>=0.30.0",
-  "sse-starlette>=1.6.0",
 ]
 
 [build-system]
@@ -29,7 +26,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["service", "service.*", "selecta", "selecta.*"]
+include = ["app", "selecta", "selecta.*"]
 
 [tool.setuptools.package-data]
 "selecta" = ["instructions.yaml", "datasets/*.yaml"]

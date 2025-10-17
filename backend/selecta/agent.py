@@ -3,16 +3,12 @@
 from dotenv import load_dotenv
 from google.adk.agents import Agent
 
-from . import storage
 from .config_loader import get_model
 from .custom_tools import execute_bigquery_query
 from .instructions import return_instructions_bigquery
 
 # Load environment variables if an env file is present
 load_dotenv(".env")
-
-# Ensure persistence tables exist even when the agent is loaded outside FastAPI
-storage.init_db()
 
 
 def build_agent() -> Agent:
