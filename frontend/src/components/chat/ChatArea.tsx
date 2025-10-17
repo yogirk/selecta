@@ -20,7 +20,7 @@ export function ChatArea() {
   }, [messages, currentStreamingText]);
 
   return (
-    <div className="flex-1 min-h-0 bg-background/80 backdrop-blur">
+    <div className="layer-base flex-1 min-h-0 border-r border-border-subtle">
       <div className="h-full overflow-y-auto px-6 py-6" ref={viewportRef}>
         <div className="flex h-full flex-col gap-8">
           {messages.length === 0 && !isStreaming ? (

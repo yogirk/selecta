@@ -10,7 +10,7 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between bg-card/60 px-6 py-3 backdrop-blur-xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.25)]">
+    <header className="layer-surface sticky top-0 z-20 flex items-center justify-between border-b border-border px-6 py-3 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.25)]">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#a855f7] via-[#9333ea] to-[#7c3aed] text-white shadow-md">

@@ -29,8 +29,8 @@ export function ChatInput() {
   };
 
   return (
-    <div className="bg-background/80 px-6 py-4 backdrop-blur">
-      <Card className="input-glass rounded-xl p-3">
+    <div className="layer-surface border-t border-border-subtle px-6 py-4">
+      <Card className="card-elevated rounded-xl p-3 shadow-xl">
         <div className="flex items-end gap-3">
           <div className="flex-1">
             <Textarea

@@ -21,7 +21,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
     return (
       <div className="animate-in slide-in-from-bottom-2 flex justify-end">
         <div className="max-w-2xl">
-          <Card className="card-subtle rounded-2xl rounded-tr-none px-5 py-3 text-sm">
+          <Card className="card-elevated rounded-2xl rounded-tr-none px-5 py-3 text-sm">
             <p className="text-card-foreground whitespace-pre-wrap">{message.text}</p>
           </Card>
           <div className="mt-2 flex items-center justify-end gap-2">

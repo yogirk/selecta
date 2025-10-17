@@ -65,8 +65,8 @@ export function SessionList({ onCollapse }: SessionListProps) {
   };
 
   return (
-    <aside className="hidden h-full w-72 shrink-0 flex-col bg-card/40 backdrop-blur-xl shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] lg:flex">
-      <div className="flex items-center gap-2 p-4">
+    <aside className="layer-surface hidden h-full w-72 shrink-0 flex-col border-r border-border shadow-[0_20px_60px_-40px_rgba(15,23,42,0.25)] lg:flex">
+      <div className="flex items-center gap-2 border-b border-border-subtle p-4">
         <div className="flex items-center gap-2">
           <Button
             onClick={createNewSession}
@@ -128,28 +128,28 @@ export function SessionList({ onCollapse }: SessionListProps) {
         </ScrollArea>
       </div>
 
-      <div className="p-4">
+      <div className="border-t border-border-subtle p-4">
         <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
           Quick Actions
         </h3>
         <div className="space-y-2">
           <Button
             variant="ghost"
-            className="h-10 w-full justify-start gap-2 rounded-full border-0 bg-secondary/30 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            className="h-10 w-full justify-start gap-2 rounded-full border-0 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
             size="sm"
           >
             Browse Tables
           </Button>
           <Button
             variant="ghost"
-            className="h-10 w-full justify-start gap-2 rounded-full border-0 bg-secondary/30 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            className="h-10 w-full justify-start gap-2 rounded-full border-0 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
             size="sm"
           >
             Saved Queries
           </Button>
           <Button
             variant="ghost"
-            className="h-10 w-full justify-start gap-2 rounded-full border-0 bg-secondary/30 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            className="h-10 w-full justify-start gap-2 rounded-full border-0 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
             size="sm"
           >
             ML Models

@@ -13,7 +13,7 @@ export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen w-full flex-col bg-background">
+    <div className="layer-base flex min-h-screen w-full flex-col">
       <Header />
 
       <main className="flex flex-1 overflow-hidden">
@@ -34,7 +34,7 @@ export default function Home() {
             </div>
           )}
 
-          <section className="flex min-h-0 min-w-0 flex-1 flex-col bg-background">
+          <section className="layer-base flex min-h-0 min-w-0 flex-1 flex-col">
             <ChatArea />
             <ChatInput />
           </section>

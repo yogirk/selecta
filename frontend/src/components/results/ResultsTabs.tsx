@@ -12,7 +12,7 @@ import { BarChart, Table, Lightbulb, Code, Info, Maximize2 } from 'lucide-react'
 export function ResultsTabs() {
   return (
     <aside
-      className="analysis-panel hidden h-full w-[420px] shrink-0 flex-col shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] xl:flex"
+      className="analysis-panel hidden h-full w-[420px] shrink-0 flex-col border-l border-border shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] xl:flex"
       style={{ minWidth: '420px' }}
     >
       <Tabs defaultValue="visualization" className="flex h-full flex-col">
