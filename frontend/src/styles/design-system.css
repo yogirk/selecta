@@ -1,0 +1,33 @@
+@layer components {
+  .card-elevated {
+    @apply bg-card/60 backdrop-blur-sm shadow-lg border-0 transition-all duration-200 hover:shadow-xl;
+  }
+
+  .card-subtle {
+    @apply bg-card/40 backdrop-blur-sm shadow-md border-0;
+  }
+
+  .card-ghost {
+    @apply bg-transparent border-0 transition-colors hover:bg-card/20;
+  }
+
+  .session-card {
+    @apply rounded-xl bg-card/50 backdrop-blur-sm border-0 shadow-sm transition-all duration-200 hover:bg-card/70 hover:shadow-lg;
+  }
+
+  .session-card-active {
+    @apply bg-gradient-to-r from-primary/12 to-transparent shadow-lg border-l-2 border-primary/70;
+  }
+
+  .empty-state {
+    @apply bg-secondary/10 backdrop-blur-sm border-0 shadow-[0_18px_40px_-35px_rgba(15,23,42,0.35)];
+  }
+
+  .input-glass {
+    @apply bg-card/70 backdrop-blur-md border-0 shadow-2xl;
+  }
+
+  .analysis-panel {
+    @apply bg-card/40 backdrop-blur-md shadow-[0_24px_60px_-40px_rgba(15,23,42,0.35)];
+  }
+}

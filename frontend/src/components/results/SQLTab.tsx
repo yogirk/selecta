@@ -16,7 +16,7 @@ export function SQLTab() {
 
   if (!activeResult?.sql) {
     return (
-      <Card>
+      <Card className="card-subtle">
         <CardContent className="p-8 text-center">
           <p className="text-sm text-muted-foreground">
             No SQL query available. Send a query to see the generated SQL.
@@ -32,7 +32,7 @@ export function SQLTab() {
         SQL Query
       </h4>
       
-      <Card>
+      <Card className="card-elevated">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-xs uppercase tracking-wider text-primary">
             Generated Query

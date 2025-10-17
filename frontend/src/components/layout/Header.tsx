@@ -10,15 +10,15 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between bg-card/95 px-6 py-4 shadow-[0_14px_40px_-30px_hsl(var(--color-foreground)/0.4)] backdrop-blur">
+    <header className="sticky top-0 z-20 flex items-center justify-between bg-card/60 px-6 py-3 backdrop-blur-xl shadow-[0_16px_40px_-28px_rgba(15,23,42,0.25)]">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-[#a855f7] via-[#9333ea] to-[#7c3aed] text-white shadow-md">
             <Sparkles className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-foreground">Selecta</h1>
-            <p className="text-xs text-muted-foreground">AI Analytics</p>
+            <h1 className="text-xl font-semibold text-foreground">Selecta</h1>
+            <p className="text-xs text-muted-foreground">AI Analytics Platform</p>
           </div>
         </div>
       </div>
@@ -36,16 +36,16 @@ export function Header() {
             <Moon className="h-5 w-5" />
           )}
         </Button>
-        <Badge variant="secondary" className="gap-2 rounded-full bg-secondary/60 px-3 py-1.5 text-xs font-medium text-muted-foreground">
-          <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-          BigQuery Connected
+        <Badge variant="outline" className="gap-2 rounded-full border-border/20 bg-card/70 px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur">
+          <div className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+          <span>BigQuery Connected</span>
         </Badge>
-        <Button variant="ghost" size="sm" className="rounded-lg text-muted-foreground hover:text-foreground">
+        <Button variant="outline" size="sm" className="rounded-lg gap-2 bg-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground">
           <Settings className="mr-2 h-4 w-4" />
           Settings
         </Button>
-        <Avatar className="h-10 w-10 rounded-full border border-border bg-card">
-          <AvatarFallback className="text-sm font-semibold text-foreground">
+        <Avatar className="h-9 w-9 rounded-full bg-gradient-to-br from-primary to-primary/60 text-primary-foreground shadow-md">
+          <AvatarFallback className="text-sm font-semibold text-primary-foreground">
             U
           </AvatarFallback>
         </Avatar>

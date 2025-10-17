@@ -12,7 +12,7 @@ export function MetaTab() {
         Execution Metadata
       </h4>
       
-      <Card>
+      <Card className="card-elevated">
         <CardHeader>
           <CardTitle className="text-xs uppercase tracking-wider text-muted-foreground">
             Query Performance

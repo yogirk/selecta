@@ -16,7 +16,7 @@ export function TableTab() {
 
   if (!activeResult?.rows || !activeResult?.columns) {
     return (
-      <Card>
+      <Card className="card-subtle">
         <div className="p-8 text-center">
           <p className="text-sm text-muted-foreground">
             No table data available. Send a query to see results.
@@ -32,7 +32,7 @@ export function TableTab() {
         Query Results
       </h4>
       
-      <Card className="overflow-hidden">
+      <Card className="card-elevated overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>

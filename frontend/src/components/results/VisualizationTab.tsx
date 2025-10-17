@@ -11,7 +11,7 @@ export function VisualizationTab() {
 
   if (!activeResult?.chart) {
     return (
-      <Card>
+      <Card className="card-subtle">
         <CardContent className="p-8 text-center">
           <p className="text-sm text-muted-foreground">
             No visualization available. Send a query to see results.
@@ -27,7 +27,7 @@ export function VisualizationTab() {
         Data Visualization
       </h4>
       
-      <Card>
+      <Card className="card-elevated">
         <CardContent className="p-4">
           <VegaEmbed 
             spec={activeResult.chart} 

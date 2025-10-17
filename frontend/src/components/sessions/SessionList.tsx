@@ -65,12 +65,12 @@ export function SessionList({ onCollapse }: SessionListProps) {
   };
 
   return (
-    <aside className="surface-panel hidden h-full w-[280px] shrink-0 flex-col overflow-hidden rounded-2xl lg:flex">
-      <div className="p-4 pb-3">
+    <aside className="hidden h-full w-72 shrink-0 flex-col bg-card/40 backdrop-blur-xl shadow-[0_20px_60px_-40px_rgba(15,23,42,0.35)] lg:flex">
+      <div className="flex items-center gap-2 p-4">
         <div className="flex items-center gap-2">
           <Button
             onClick={createNewSession}
-            className="flex-1 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90"
+            className="flex-1 rounded-xl bg-gradient-to-r from-[#a855f7] to-[#7c3aed] text-white shadow-md transition hover:from-[#9a4ff6] hover:to-[#6d28d9]"
           >
             <Plus className="mr-2 h-5 w-5" />
             New Session
@@ -87,8 +87,8 @@ export function SessionList({ onCollapse }: SessionListProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden px-4 pb-4">
-        <div className="mb-4 flex items-center justify-between">
+      <div className="flex-1 overflow-hidden p-4">
+        <div className="mb-3 flex items-center justify-between">
           <h3 className="text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
             Recent Sessions
           </h3>
@@ -96,7 +96,7 @@ export function SessionList({ onCollapse }: SessionListProps) {
         </div>
 
         <ScrollArea className="h-full pr-1">
-          <div className="space-y-2">
+          <div className="space-y-3">
             {sessions.map((session) => {
               const isActive = session.id === currentSessionId;
               const sessionLabel = session.events.length > 0 ? 'Active Session' : 'New Session';
@@ -104,8 +104,8 @@ export function SessionList({ onCollapse }: SessionListProps) {
                 <div
                   key={session.id}
                   onClick={() => selectSession(session.id)}
-                  className={`cursor-pointer rounded-xl bg-card/95 p-3 shadow-[0_14px_22px_-22px_hsl(var(--color-foreground)/0.5)] transition-all hover:translate-y-[-1px] hover:shadow-[0_20px_30px_-24px_hsl(var(--color-foreground)/0.55)] ${
-                    isActive ? 'ring-1 ring-primary/60' : ''
+                  className={`session-card cursor-pointer p-4 ${
+                    isActive ? 'session-card-active' : ''
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -117,7 +117,7 @@ export function SessionList({ onCollapse }: SessionListProps) {
                         {session.events.length > 0 ? `${session.events.length} messages` : 'No messages yet'}
                       </p>
                     </div>
-                    <span className="rounded-full bg-secondary/60 px-2 py-1 text-[10px] font-medium text-secondary-foreground/80">
+                    <span className="rounded-full bg-secondary/70 px-2 py-1 text-[10px] font-medium text-secondary-foreground">
                       {formatTimestamp(session.lastUpdateTime)}
                     </span>
                   </div>
@@ -128,18 +128,30 @@ export function SessionList({ onCollapse }: SessionListProps) {
         </ScrollArea>
       </div>
 
-      <div className="px-4 pb-4 pt-3">
+      <div className="p-4">
         <h3 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.26em] text-muted-foreground">
           Quick Actions
         </h3>
         <div className="space-y-2">
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-lg text-xs text-muted-foreground hover:text-foreground" size="sm">
+          <Button
+            variant="ghost"
+            className="h-10 w-full justify-start gap-2 rounded-full border-0 bg-secondary/30 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            size="sm"
+          >
             Browse Tables
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-lg text-xs text-muted-foreground hover:text-foreground" size="sm">
+          <Button
+            variant="ghost"
+            className="h-10 w-full justify-start gap-2 rounded-full border-0 bg-secondary/30 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            size="sm"
+          >
             Saved Queries
           </Button>
-          <Button variant="ghost" className="w-full justify-start gap-2 rounded-lg text-xs text-muted-foreground hover:text-foreground" size="sm">
+          <Button
+            variant="ghost"
+            className="h-10 w-full justify-start gap-2 rounded-full border-0 bg-secondary/30 px-4 text-xs text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            size="sm"
+          >
             ML Models
           </Button>
         </div>

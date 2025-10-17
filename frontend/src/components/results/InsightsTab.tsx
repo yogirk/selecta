@@ -12,7 +12,7 @@ export function InsightsTab() {
         AI Insights
       </h4>
       
-      <Card>
+      <Card className="card-elevated">
         <CardHeader>
           <CardTitle className="text-sm">Analysis Summary</CardTitle>
         </CardHeader>

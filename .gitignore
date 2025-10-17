@@ -16,3 +16,4 @@ frontend/out/
 # OS artifacts
 .DS_Store
 .env
+v0-frontend/

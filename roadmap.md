@@ -32,7 +32,7 @@
 - Ensured `/api/chat` aggregates the same visualization/insight/suggestion data for parity with streaming clients.
 - Documented the event schema and payload examples in the README and API contract.
 
-## 7. Frontend Implementation (Shadcn + Next.js)
+## ✅ 7. Frontend Implementation (Shadcn + Next.js)
 - Rebuild UI from scratch on top of the ADK API server.
 - Design new three-panel (or improved) layout with streaming updates and dataset controls.
 - Integrate structured insights/visualizations surfaced via ADK `stateDelta`.
