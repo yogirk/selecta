@@ -27,7 +27,7 @@
 
   .session-card-active {
     @apply rounded-xl border border-primary/40 shadow-lg ring-1 ring-primary/20;
-    background-image: linear-gradient(to right, hsl(var(--primary) / 0.12), transparent);
+    background-image: linear-gradient(to right, hsl(var(--primary) / 0.18), transparent);
   }
 
   .empty-state {
