@@ -125,13 +125,22 @@ export function SessionList({ onCollapse }: SessionListProps) {
       <div className="border-t border-border-subtle px-4 py-4">
         <p className="mb-3 text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Quick Actions</p>
         <div className="space-y-2">
-          <Button variant="outline" className="w-full justify-start text-sm hover:bg-primary/10 hover:text-primary">
+          <Button
+            variant="ghost"
+            className="h-auto w-full justify-start rounded-full bg-[hsl(var(--card))] px-5 py-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-[hsl(var(--card))/0.92] hover:text-foreground"
+          >
             Browse Tables
           </Button>
-          <Button variant="outline" className="w-full justify-start text-sm hover:bg-primary/10 hover:text-primary">
+          <Button
+            variant="ghost"
+            className="h-auto w-full justify-start rounded-full bg-[hsl(var(--card))] px-5 py-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-[hsl(var(--card))/0.92] hover:text-foreground"
+          >
             Saved Queries
           </Button>
-          <Button variant="outline" className="w-full justify-start text-sm hover:bg-primary/10 hover:text-primary">
+          <Button
+            variant="ghost"
+            className="h-auto w-full justify-start rounded-full bg-[hsl(var(--card))] px-5 py-3 text-sm font-medium text-foreground shadow-sm transition-colors hover:bg-[hsl(var(--card))/0.92] hover:text-foreground"
+          >
             ML Models
           </Button>
         </div>

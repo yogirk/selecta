@@ -39,7 +39,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    document.documentElement.dataset.theme = theme;
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
     window.localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 

@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useStore } from '@/lib/store';
 
-export function MetaTab() {
+export function MetaSection() {
   const { activeResult } = useStore();
 
   return (

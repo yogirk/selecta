@@ -5,9 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { VisualizationTab } from './VisualizationTab';
 import { TableTab } from './TableTab';
 import { SQLTab } from './SQLTab';
-import { MetaTab } from './MetaTab';
+import { MetaSection } from './MetaTab';
 import { InsightsTab } from './InsightsTab';
-import { BarChart, Table, Lightbulb, Code, Info, Maximize2 } from 'lucide-react';
+import { BarChart, Table, Lightbulb, Code, Maximize2 } from 'lucide-react';
 
 export function ResultsTabs() {
   return (
@@ -26,28 +26,24 @@ export function ResultsTabs() {
         </div>
       </div>
 
-      <Tabs defaultValue="visualization" className="flex h-full flex-col">
+      <Tabs defaultValue="visualization" className="flex flex-1 flex-col">
         <div className="mt-4 px-6">
-          <TabsList className="flex w-full gap-1 overflow-x-auto rounded-lg border border-border-subtle bg-card p-1">
-            <TabsTrigger value="visualization" className="flex-shrink-0 gap-2 px-4 py-2 text-sm">
+          <TabsList className="grid w-full grid-cols-4 gap-1 rounded-lg border border-border-subtle bg-card p-1">
+            <TabsTrigger value="visualization" className="justify-center gap-2 px-3 py-2 text-sm">
               <BarChart className="h-4 w-4" />
               Chart
             </TabsTrigger>
-            <TabsTrigger value="table" className="flex-shrink-0 gap-2 px-4 py-2 text-sm">
+            <TabsTrigger value="table" className="justify-center gap-2 px-3 py-2 text-sm">
               <Table className="h-4 w-4" />
               Table
             </TabsTrigger>
-            <TabsTrigger value="insights" className="flex-shrink-0 gap-2 px-4 py-2 text-sm">
+            <TabsTrigger value="insights" className="justify-center gap-2 px-3 py-2 text-sm">
               <Lightbulb className="h-4 w-4" />
               Insights
             </TabsTrigger>
-            <TabsTrigger value="sql" className="flex-shrink-0 gap-2 px-4 py-2 text-sm">
+            <TabsTrigger value="sql" className="justify-center gap-2 px-3 py-2 text-sm">
               <Code className="h-4 w-4" />
               SQL
-            </TabsTrigger>
-            <TabsTrigger value="meta" className="flex-shrink-0 gap-2 px-4 py-2 text-sm">
-              <Info className="h-4 w-4" />
-              Meta
             </TabsTrigger>
           </TabsList>
         </div>
@@ -65,11 +61,12 @@ export function ResultsTabs() {
           <TabsContent value="sql" className="mt-0">
             <SQLTab />
           </TabsContent>
-          <TabsContent value="meta" className="mt-0">
-            <MetaTab />
-          </TabsContent>
         </div>
       </Tabs>
+
+      <div className="border-t border-border-subtle bg-[hsl(var(--surface))] px-6 py-4">
+        <MetaSection />
+      </div>
     </div>
   );
 }
