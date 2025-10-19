@@ -103,7 +103,7 @@ export function SessionList({ onCollapse }: SessionListProps) {
   }
 
   return (
-    <div className="hidden h-full w-72 flex-col border-r border-border-subtle bg-[hsl(var(--surface))] lg:flex">
+    <div className="hidden h-full w-72 flex-col border-r border-border-subtle bg-[color:var(--card)] lg:flex">
       <div className="flex-shrink-0 border-b border-border-subtle">
         <div className="flex items-center justify-between px-4 py-4">
           <h2 className="heading-sm text-foreground">Sessions</h2>
@@ -146,13 +146,21 @@ export function SessionList({ onCollapse }: SessionListProps) {
               const isRemoving = removingId === session.id
 
               return (
-                <button
+                <div
                   key={session.id}
+                  role="button"
+                  tabIndex={0}
                   onClick={() => selectSession(session.id)}
-                  className={`group w-full rounded-lg border px-4 py-3 text-left transition-all duration-200 ${
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      void selectSession(session.id);
+                    }
+                  }}
+                  className={`group w-full rounded-lg border bg-[color:var(--background)] px-4 py-3 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 ${
                     isActive
                       ? "border-primary/50 bg-primary/15 text-primary shadow-lg shadow-primary/10"
-                      : "border-border-subtle bg-card hover:border-border hover:bg-card/90"
+                      : "border-border-subtle hover:border-border hover:bg-[color:var(--card)]"
                   } ${isRemoving ? "translate-x-4 scale-[0.97] opacity-0" : ""}`}
                 >
                   <div className="flex items-center justify-between gap-3">
@@ -199,12 +207,15 @@ export function SessionList({ onCollapse }: SessionListProps) {
                       </div>
                     </div>
                   </div>
-                </button>
+                </div>
               )
             })}
           </div>
         </ScrollArea>
-        <div className="pointer-events-none absolute bottom-0 left-4 right-4 h-12 bg-gradient-to-t from-[hsl(var(--surface))] to-transparent" />
+        <div
+          className="pointer-events-none absolute bottom-0 left-4 right-4 h-12"
+          style={{ background: 'linear-gradient(to top, var(--card), transparent)' }}
+        />
       </div>
 
       <div className="flex-shrink-0 border-t border-border-subtle px-4 py-4">
@@ -216,9 +227,9 @@ export function SessionList({ onCollapse }: SessionListProps) {
               <Button
                 key={action.id}
                 variant="ghost"
-                className="h-12 w-full justify-start gap-3 rounded-xl border border-border-subtle bg-[hsl(var(--card))] px-4 text-sm font-medium text-foreground/80 transition-all duration-150 hover:border-primary/40 hover:bg-primary/15 hover:text-primary"
+                className="group h-12 w-full justify-start gap-3 rounded-xl border border-border-subtle bg-[color:var(--background)] px-4 text-sm font-medium text-foreground/80 transition-all duration-150 hover:border-primary/40 hover:bg-primary/15 hover:text-primary"
               >
-                <Icon className="h-4 w-4 text-muted-foreground group-hover:text-primary" />
+                <Icon className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
                 {action.label}
               </Button>
             )

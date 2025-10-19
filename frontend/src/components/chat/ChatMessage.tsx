@@ -7,6 +7,10 @@ import { Zap, Eye } from 'lucide-react';
 import { Message } from '@/types';
 import { useStore } from '@/lib/store';
 import { formatTimestamp } from '@/lib/utils';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import { Highlight, themes } from 'prism-react-renderer';
 
 interface ChatMessageProps {
   message: Message;
@@ -38,7 +42,52 @@ export function ChatMessage({ message }: ChatMessageProps) {
             isAssistant ? 'border border-border-subtle bg-card shadow-sm' : 'border border-primary/25 bg-primary/10'
           }`}
         >
-          <p className="text-sm text-foreground whitespace-pre-wrap">{message.text}</p>
+          <div className="markdown">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+              components={{
+                code({ inline, className, children, ...props }) {
+                  const match = /language-(\w+)/.exec(className || '');
+                  if (inline) {
+                    return (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  }
+                  const language = match?.[1] ?? 'plaintext';
+                  const code = String(children).replace(/\n$/, '');
+                  return (
+                    <Highlight code={code} language={language} theme={themes.nightOwl}>
+                      {({ className: highlightClass, style, tokens, getLineProps, getTokenProps }) => (
+                        <pre
+                          className={`${highlightClass} markdown-pre`}
+                          style={{
+                            ...style,
+                            margin: 0,
+                            borderRadius: '0.75rem',
+                            background: 'var(--surface)',
+                            padding: '1rem',
+                          }}
+                        >
+                          {tokens.map((line, i) => (
+                            <div key={i} {...getLineProps({ line, key: i })}>
+                              {line.map((token, key) => (
+                                <span key={key} {...getTokenProps({ token, key })} />
+                              ))}
+                            </div>
+                          ))}
+                        </pre>
+                      )}
+                    </Highlight>
+                  );
+                },
+              }}
+            >
+              {message.text}
+            </ReactMarkdown>
+          </div>
 
           {isAssistant && message.result && (
             <Button

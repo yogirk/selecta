@@ -10,7 +10,7 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="border-b border-border-subtle bg-[hsl(var(--surface))/0.8] backdrop-blur-sm">
+    <header className="border-b border-border-subtle bg-[color:var(--card)]">
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent shadow-sm">
@@ -18,7 +18,7 @@ export function Header() {
           </div>
           <div className="flex flex-col">
             <h1 className="text-lg font-semibold text-foreground">Selecta</h1>
-            <p className="text-xs text-muted-foreground">Cloudside Solution</p>
+            <p className="text-xs text-muted-foreground">Agentic Analytics solution from Cloudside</p>
           </div>
         </div>
 

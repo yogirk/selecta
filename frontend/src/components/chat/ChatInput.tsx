@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Paperclip, Code } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useSSE } from '@/hooks/useSSE';
 import { getUserId } from '@/lib/utils';
 import { useStore } from '@/lib/store';
@@ -29,7 +29,7 @@ export function ChatInput() {
   };
 
   return (
-    <div className="border-t border-border-subtle bg-[hsl(var(--surface))] px-6 py-4">
+    <div className="layer-surface border-t border-border-subtle px-6 py-4">
       <Card className="rounded-2xl border border-border-subtle bg-card shadow-lg">
         <div className="flex items-end gap-3 p-3">
           <Textarea
@@ -50,16 +50,8 @@ export function ChatInput() {
           </Button>
         </div>
 
-        <div className="flex items-center gap-3 px-3 pb-3 text-xs text-muted-foreground">
-          <Button variant="ghost" size="sm" className="h-auto gap-1 px-0 py-0 text-muted-foreground hover:text-foreground">
-            <Paperclip className="h-3 w-3" />
-            Attach file
-          </Button>
-          <Button variant="ghost" size="sm" className="h-auto gap-1 px-0 py-0 text-muted-foreground hover:text-foreground">
-            <Code className="h-3 w-3" />
-            SQL editor
-          </Button>
-          <span className="ml-auto text-muted-foreground">Press Enter to send</span>
+        <div className="flex items-center justify-end px-3 pb-3 text-xs text-muted-foreground">
+          <span>Press Enter to send</span>
         </div>
       </Card>
     </div>

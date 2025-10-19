@@ -9,7 +9,7 @@ import { BarChart, Table, Lightbulb, Code } from 'lucide-react';
 
 export function ResultsTabs() {
   return (
-    <div className="hidden h-full w-[420px] flex-col border-l border-border-subtle bg-[hsl(var(--surface))] xl:flex" style={{ minWidth: '420px' }}>
+    <div className="hidden h-full w-[420px] flex-col border-l border-border-subtle bg-[color:var(--card)] xl:flex" style={{ minWidth: '420px' }}>
 
       <Tabs defaultValue="visualization" className="flex flex-1 flex-col">
         <div className="border-b border-border-subtle px-6 pt-4 pb-3">
