@@ -28,13 +28,11 @@ export function SQLTab() {
 
   return (
     <div>
-      <h4 className="text-base font-semibold text-card-foreground mb-3">
-        SQL Query
-      </h4>
+      <h4 className="heading-md mb-3 text-card-foreground">SQL Query</h4>
       
       <Card className="card-elevated">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-wider text-primary">
+          <CardTitle className="heading-xs text-primary">
             Generated Query
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={copyToClipboard}>

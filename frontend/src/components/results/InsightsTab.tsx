@@ -8,13 +8,11 @@ export function InsightsTab() {
 
   return (
     <div>
-      <h4 className="text-base font-semibold text-card-foreground mb-3">
-        AI Insights
-      </h4>
+      <h4 className="heading-md mb-3 text-card-foreground">AI Insights</h4>
       
       <Card className="card-elevated">
         <CardHeader>
-          <CardTitle className="text-sm">Analysis Summary</CardTitle>
+          <CardTitle className="heading-sm text-card-foreground">Analysis Summary</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-xs text-muted-foreground">

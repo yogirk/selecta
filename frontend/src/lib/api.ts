@@ -51,6 +51,19 @@ export class APIClient {
     return response.json();
   }
 
+  async deleteSession(userId: string, sessionId: string): Promise<void> {
+    const response = await fetch(
+      `${this.baseUrl}/apps/${this.appName}/users/${userId}/sessions/${sessionId}`,
+      {
+        method: 'DELETE'
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete session: ${response.statusText}`);
+    }
+  }
+
   createSSEConnection(
     userId: string,
     sessionId: string,

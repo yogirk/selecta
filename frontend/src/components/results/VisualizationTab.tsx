@@ -23,9 +23,7 @@ export function VisualizationTab() {
 
   return (
     <div>
-      <h4 className="text-base font-semibold text-card-foreground mb-3">
-        Data Visualization
-      </h4>
+      <h4 className="heading-md mb-3 text-card-foreground">Data Visualization</h4>
       
       <Card className="card-elevated">
         <CardContent className="p-4">

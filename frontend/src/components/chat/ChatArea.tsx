@@ -28,7 +28,7 @@ export function ChatArea() {
               <Zap className="h-8 w-8 text-primary" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-foreground">Start a conversation</h2>
+              <h2 className="heading-md text-foreground">Start a conversation</h2>
               <p className="mt-2 max-w-xs text-sm text-muted-foreground">
                 Ask about your data, explore insights, or request a forecast—the assistant will guide you.
               </p>

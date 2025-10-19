@@ -46,4 +46,20 @@
     @apply shadow-[0_24px_60px_-40px_rgba(15,23,42,0.35)] backdrop-blur-md;
     background-color: hsl(var(--surface));
   }
+
+  .heading-lg {
+    @apply text-lg font-semibold uppercase tracking-[0.18em];
+  }
+
+  .heading-md {
+    @apply text-base font-semibold uppercase tracking-[0.22em];
+  }
+
+  .heading-sm {
+    @apply text-sm font-semibold uppercase tracking-[0.26em];
+  }
+
+  .heading-xs {
+    @apply text-xs font-semibold uppercase tracking-[0.28em];
+  }
 }
