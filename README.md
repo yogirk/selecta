@@ -1,4 +1,5 @@
 # Selecta
+![alt text](image.png)
 
 > Natural-language analytics for BigQuery, powered by Google’s ADK and a streaming Next.js experience.
 
