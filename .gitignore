@@ -1,0 +1,46 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*.db
+uv.lock
+*.egg-info/
+
+# Node.js
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Environment files and credentials (DO NOT COMMIT)
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+*.pem
+*.key
+*.crt
+*.p12
+*.jks
+secrets.json
+secrets.yaml
+secrets.yml
+config/secrets/
+
+# API Keys and tokens (patterns to catch accidental commits)
+*api_key*
+*secret_key*
+*private_key*
+*access_token*
+*refresh_token*
+*auth_token*
+*bearer_token*
+*oauth_token*
+*jwt_secret*
+*session_secret*
+
+# OS artifacts
+.DS_Store
+v0-frontend/

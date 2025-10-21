@@ -1,0 +1,17 @@
+.git
+.gitignore
+.DS_Store
+node_modules
+frontend/node_modules
+frontend/.next
+frontend/out
+backend/.venv
+backend/.env
+backend/selecta.db
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.log
