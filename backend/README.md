@@ -86,4 +86,4 @@ See `backend/api-contract.md` for the full JSON example and endpoint catalogue.
 
 ## Deployment Notes
 
-The project now relies entirely on the ADK server; previous FastAPI/Docker assets have been removed. Deployment scripts should launch `adk api_server` with the desired host/port and environment variables (credentials, dataset config, etc.).
+The project now relies entirely on the ADK server; Extra FastAPI. or Flask backend is not needed.

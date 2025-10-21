@@ -24,7 +24,7 @@ gcloud secrets add-iam-policy-binding selecta-gemini-key \
 
 ## Build & Deploy
 
-Run the helper script (it mirrors the manual command that we validated):
+Run the helper script:
 
 ```bash
 ./deploy-cloud-run.sh \
