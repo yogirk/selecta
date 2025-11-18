@@ -1,17 +1,16 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Zap, Eye } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronRight, BarChart, ArrowRight, Sparkles, User } from 'lucide-react';
 import { Message } from '@/types';
 import { useStore } from '@/lib/store';
-import { cn, formatTimestamp } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import { Highlight, themes } from 'prism-react-renderer';
-import { useTheme } from '@/components/layout/ThemeProvider';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ThinkingIndicator } from './ThinkingIndicator';
+import { CodeBlock } from './CodeBlock';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 type CodeRendererProps = {
@@ -27,108 +26,142 @@ interface ChatMessageProps {
 export function ChatMessage({ message }: ChatMessageProps) {
   const activeResultId = useStore((state) => state.activeResultId);
   const setActiveResultById = useStore((state) => state.setActiveResultById);
-  const { theme } = useTheme();
+  const [isReasoningOpen, setIsReasoningOpen] = useState(false);
 
   const isAssistant = message.role !== 'user';
   const resultId = message.resultId ?? message.result?.id;
   const isResultSelected = Boolean(resultId && activeResultId === resultId);
-  const codeTheme = theme === 'dark' ? themes.nightOwl : themes.github;
+
+  const showThinking = isAssistant && !message.text && !message.thinking && !message.resultId;
 
   return (
-    <div className={`flex gap-3 animate-in fade-in ${isAssistant ? '' : 'flex-row-reverse text-right'}`}>
-      <Avatar
-        className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg ${
-          isAssistant ? 'bg-primary/20' : 'bg-accent/20'
-        }`}
-      >
-        <AvatarFallback className="bg-transparent">
-          {isAssistant ? <Zap className="h-4 w-4 text-primary" /> : <span className="h-3 w-3 rounded-full bg-accent" />}
-        </AvatarFallback>
-      </Avatar>
-
-      <div className="min-w-0 flex-1">
-        {message.thinking && (
-          <details className="rounded-lg border border-border-subtle bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
-            <summary>View reasoning</summary>
-            <div className="mt-2 whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-muted-foreground/80">
-              {message.thinking}
-            </div>
-          </details>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className={cn(
+        "group flex w-full gap-4",
+        !isAssistant && "flex-row-reverse"
+      )}
+    >
+      <div className={cn(
+        "flex h-8 w-8 shrink-0 select-none items-center justify-center rounded-full border shadow-sm",
+        isAssistant ? "bg-primary/10 border-primary/20 text-primary" : "bg-muted border-border-subtle text-muted-foreground"
+      )}>
+        {isAssistant ? (
+          <Sparkles className="h-4 w-4" />
+        ) : (
+          <User className="h-4 w-4" />
         )}
-
-        <Card
-          className={`rounded-lg px-4 py-3 ${
-            isAssistant ? 'border border-border-subtle bg-card shadow-sm' : 'border border-primary/25 bg-primary/10'
-          }`}
-        >
-          <div className="markdown">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
-              components={{
-                code({ inline, className, children, ...props }: CodeRendererProps) {
-                  const match = /language-(\w+)/.exec(className || '');
-                  if (inline) {
-                    return (
-                      <code className={cn('inline-code', className)} {...props}>
-                        {children}
-                      </code>
-                    );
-                  }
-                  const language = match?.[1] ?? 'plaintext';
-                  const code = String(children).replace(/\n$/, '');
-                  return (
-                    <Highlight code={code} language={language} theme={codeTheme}>
-                      {({ className: highlightClass, style, tokens, getLineProps, getTokenProps }) => (
-                        <pre
-                          className={`${highlightClass} markdown-pre`}
-                          style={{
-                            ...style,
-                            margin: 0,
-                            borderRadius: '0.75rem',
-                            background: 'var(--surface)',
-                            padding: '1rem',
-                          }}
-                        >
-                          {tokens.map((line, lineIndex) => (
-                            <div key={lineIndex} {...getLineProps({ line, key: lineIndex })}>
-                              {line.map((token, tokenIndex) => (
-                                <span key={tokenIndex} {...getTokenProps({ token, key: tokenIndex })} />
-                              ))}
-                            </div>
-                          ))}
-                        </pre>
-                      )}
-                    </Highlight>
-                  );
-                },
-              }}
-            >
-              {message.text}
-            </ReactMarkdown>
-          </div>
-
-          {isAssistant && resultId && (
-            <Button
-              onClick={() => setActiveResultById(resultId)}
-              variant={isResultSelected ? 'default' : 'outline'}
-              size="sm"
-              className={`mt-3 gap-2 rounded-full px-3 py-1 text-xs ${
-                isResultSelected
-                  ? 'bg-primary text-primary-foreground'
-                  : 'border-border-subtle text-muted-foreground hover:border-primary hover:text-foreground'
-              }`}
-            >
-              <Eye className="h-4 w-4" />
-              {isResultSelected ? 'Viewing Results' : 'View Results'}
-            </Button>
-          )}
-        </Card>
-
-        <div className={`mt-2 flex items-center gap-2 text-xs text-muted-foreground ${isAssistant ? '' : 'justify-end'}`}>
-          {formatTimestamp(message.timestamp)}
-        </div>
       </div>
-    </div>
+
+      <div className={cn("flex max-w-[85%] flex-col gap-2", !isAssistant && "items-end")}>
+        <div className="flex items-center gap-2 px-1">
+          <span className="text-xs font-medium text-muted-foreground">
+            {isAssistant ? 'Selecta' : 'You'}
+          </span>
+          <span className="text-xs text-muted-foreground/60">
+            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </span>
+        </div>
+
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-2xl px-5 py-3.5 text-sm shadow-sm",
+            isAssistant
+              ? "bg-card border border-border-subtle text-foreground"
+              : "bg-primary/10 border border-primary/10 text-foreground"
+          )}
+        >
+          {showThinking && (
+            <ThinkingIndicator />
+          )}
+
+          {message.thinking && (
+            <div className="mb-4">
+              <div
+                className="flex cursor-pointer items-center gap-2 rounded-lg bg-muted/50 px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                onClick={() => setIsReasoningOpen(!isReasoningOpen)}
+              >
+                <motion.div
+                  animate={{ rotate: isReasoningOpen ? 90 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </motion.div>
+                <span>Reasoning Process</span>
+              </div>
+              <AnimatePresence>
+                {isReasoningOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-2 border-l-2 border-border-subtle pl-3 text-muted-foreground">
+                      <ReactMarkdown className="markdown text-xs">
+                        {message.thinking}
+                      </ReactMarkdown>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {message.text && (
+            <div className="markdown">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  code({ inline, className, children, ...props }: CodeRendererProps) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    const language = match?.[1] ?? 'plaintext';
+                    const code = String(children).replace(/\n$/, '');
+
+                    if (inline) {
+                      return (
+                        <code className={cn('inline-code', className)} {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+
+                    return <CodeBlock language={language} code={code} />;
+                  },
+                }}
+              >
+                {message.text}
+              </ReactMarkdown>
+            </div>
+          )}
+        </div>
+
+        {isAssistant && resultId && (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <button
+              onClick={() => setActiveResultById(resultId)}
+              className={cn(
+                "flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all",
+                isResultSelected
+                  ? "border-primary bg-primary/5 text-primary shadow-sm"
+                  : "border-border-subtle bg-card text-muted-foreground hover:border-primary/30 hover:text-foreground"
+              )}
+            >
+              <BarChart className="h-3.5 w-3.5" />
+              <span>View Analysis Result</span>
+              <ArrowRight className={cn("h-3 w-3 transition-transform", isResultSelected && "translate-x-0.5")} />
+            </button>
+          </motion.div>
+        )}
+      </div>
+    </motion.div>
   );
 }

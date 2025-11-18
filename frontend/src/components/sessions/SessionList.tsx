@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Plus, PanelLeftClose, Pencil, Trash2, Database, LibrarySquare, Zap } from "lucide-react"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useStore } from "@/lib/store"
 import { apiClient } from "@/lib/api"
 import { getUserId, generateId, formatTimestamp } from "@/lib/utils"
@@ -34,6 +36,7 @@ export function SessionList({ onCollapse }: SessionListProps) {
   } = useStore()
 
   const [removingId, setRemovingId] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     loadSessions()
@@ -42,6 +45,7 @@ export function SessionList({ onCollapse }: SessionListProps) {
 
   const loadSessions = async () => {
     try {
+      setIsLoading(true)
       const userId = getUserId()
       const sessionsList = await apiClient.getSessions(userId)
       const sortedSessions = [...sessionsList].sort((a, b) => (b.lastUpdateTime ?? 0) - (a.lastUpdateTime ?? 0))
@@ -55,6 +59,8 @@ export function SessionList({ onCollapse }: SessionListProps) {
       }
     } catch (error) {
       console.error("Failed to load sessions:", error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -68,6 +74,7 @@ export function SessionList({ onCollapse }: SessionListProps) {
       clearMessages()
 
       await loadSessions()
+      toast.success("New session created")
     } catch (error) {
       console.error("Failed to create session:", error)
     }
@@ -136,80 +143,92 @@ export function SessionList({ onCollapse }: SessionListProps) {
 
         <ScrollArea className="h-[calc(100%-3rem)]">
           <div className="space-y-3 pb-12 pr-3">
-            {sessions.map((session, index) => {
-              const isActive = session.id === currentSessionId
-              const storedName = sessionMetadata[session.id]?.name
-              const rawStateTitle = session.state ? (session.state["title"] as unknown) : undefined
-              const stateTitle = typeof rawStateTitle === "string" ? rawStateTitle.trim() : ""
-              const fallbackName = `${NAME_FALLBACK_PREFIX} ${(index + 1).toString().padStart(2, "0")}`
-              const displayName = storedName || stateTitle || fallbackName
-              const isRemoving = removingId === session.id
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="w-full rounded-lg border border-border-subtle bg-[color:var(--background)] px-4 py-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-12 rounded-full" />
+                  </div>
+                </div>
+              ))
+            ) : (
+              sessions.map((session, index) => {
+                const isActive = session.id === currentSessionId
+                const storedName = sessionMetadata[session.id]?.name
+                const rawStateTitle = session.state ? (session.state["title"] as unknown) : undefined
+                const stateTitle = typeof rawStateTitle === "string" ? rawStateTitle.trim() : ""
+                const fallbackName = `${NAME_FALLBACK_PREFIX} ${(index + 1).toString().padStart(2, "0")}`
+                const displayName = storedName || stateTitle || fallbackName
+                const isRemoving = removingId === session.id
 
-              return (
-                <div
-                  key={session.id}
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => selectSession(session.id)}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      void selectSession(session.id);
-                    }
-                  }}
-                  className={`group w-full rounded-lg border bg-[color:var(--background)] px-4 py-3 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                    isActive
+                return (
+                  <div
+                    key={session.id}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => selectSession(session.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        void selectSession(session.id);
+                      }
+                    }}
+                    className={`group w-full rounded-lg border bg-[color:var(--background)] px-4 py-3 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40 ${isActive
                       ? "border-primary/50 bg-primary/15 text-primary shadow-lg shadow-primary/10"
                       : "border-border-subtle hover:border-border hover:bg-[color:var(--card)]"
-                  } ${isRemoving ? "translate-x-4 scale-[0.97] opacity-0" : ""}`}
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="min-w-0 flex-1 truncate text-sm font-medium">{displayName}</p>
+                      } ${isRemoving ? "translate-x-4 scale-[0.97] opacity-0" : ""}`}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="min-w-0 flex-1 truncate text-sm font-medium">{displayName}</p>
 
-                    <div className="flex flex-shrink-0 items-center gap-1">
-                      <span className="rounded-full bg-secondary/60 px-2 py-1 text-xs font-medium text-secondary-foreground transition-opacity group-hover:opacity-0">
-                        {formatTimestamp(session.lastUpdateTime)}
-                      </span>
+                      <div className="flex flex-shrink-0 items-center gap-1">
+                        <span className="rounded-full bg-secondary/60 px-2 py-1 text-xs font-medium text-secondary-foreground transition-opacity group-hover:opacity-0">
+                          {formatTimestamp(session.lastUpdateTime)}
+                        </span>
 
-                      <div className="absolute right-4 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          disabled={isRemoving}
-                          className="h-7 w-7 rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground disabled:opacity-40"
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            const currentName = storedName || stateTitle || fallbackName
-                            const input = window.prompt("Name this session", currentName)
-                            if (input === null) return
-                            const trimmed = input.trim()
-                            setSessionName(session.id, trimmed.length > 0 ? trimmed : null)
-                          }}
-                          aria-label={`Rename ${displayName}`}
-                        >
-                          <Pencil className="h-3.5 w-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          disabled={isRemoving}
-                          className="h-7 w-7 rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
-                          onClick={(event) => {
-                            event.stopPropagation()
-                            if (window.confirm(`Delete ${displayName}?`)) {
-                              void deleteSession(session.id)
-                            }
-                          }}
-                          aria-label={`Delete ${displayName}`}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
+                        <div className="absolute right-4 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={isRemoving}
+                            className="h-7 w-7 rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground disabled:opacity-40"
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              const currentName = storedName || stateTitle || fallbackName
+                              const input = window.prompt("Name this session", currentName)
+                              if (input === null) return
+                              const trimmed = input.trim()
+                              setSessionName(session.id, trimmed.length > 0 ? trimmed : null)
+                              toast.success("Session renamed")
+                            }}
+                            aria-label={`Rename ${displayName}`}
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            disabled={isRemoving}
+                            className="h-7 w-7 rounded-md text-muted-foreground hover:bg-destructive/10 hover:text-destructive disabled:opacity-40"
+                            onClick={(event) => {
+                              event.stopPropagation()
+                              if (window.confirm(`Delete ${displayName}?`)) {
+                                void deleteSession(session.id)
+                                toast.success("Session deleted")
+                              }
+                            }}
+                            aria-label={`Delete ${displayName}`}
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })
+            )}
           </div>
         </ScrollArea>
         <div

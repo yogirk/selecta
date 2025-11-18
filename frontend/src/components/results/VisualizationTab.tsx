@@ -1,9 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
+import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Download, Maximize } from 'lucide-react';
+import { Download, Maximize, BarChart } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { VegaEmbed } from 'react-vega';
 import { useTheme } from '@/components/layout/ThemeProvider';
@@ -79,18 +80,19 @@ export function VisualizationTab() {
 
     const isDarkMode = theme === 'dark';
     const colors = {
-      primary: colorValue('--chart-color-1', '#7c3aed'),
+      primary: colorValue('--primary', '#7c3aed'),
+      background: 'transparent',
+      text: colorValue('--foreground', '#1f2937'),
+      muted: colorValue('--muted-foreground', '#6b7280'),
+      border: colorValue('--border-subtle', '#e5e7eb'),
+      grid: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
       range: [
         colorValue('--chart-color-1', '#7c3aed'),
         colorValue('--chart-color-2', '#6366f1'),
         colorValue('--chart-color-3', '#a855f7'),
         colorValue('--chart-color-4', '#8b5cf6'),
       ],
-      axisLabel: colorValue('--chart-axis-label', isDarkMode ? '#e5e7eb' : '#4b5563'),
-      axisTitle: colorValue('--chart-axis-title', isDarkMode ? '#f9fafb' : '#1f2937'),
-      grid: colorValue('--chart-grid', isDarkMode ? 'rgba(148, 163, 184, 0.25)' : 'rgba(148, 163, 184, 0.35)'),
-      tick: colorValue('--chart-tick', isDarkMode ? 'rgba(148, 163, 184, 0.35)' : 'rgba(148, 163, 184, 0.45)'),
-      font: colorValue('--font-geist-sans', "Inter, 'Segoe UI', system-ui, sans-serif"),
+      font: "var(--font-geist-sans), Inter, system-ui, sans-serif",
     };
 
     const mutableSpec = spec as {
@@ -103,30 +105,62 @@ export function VisualizationTab() {
 
     mutableSpec.config = {
       ...baseConfig,
-      background: 'transparent',
+      background: colors.background,
       font: colors.font,
+      view: {
+        stroke: 'transparent', // Remove outer border
+      },
       axis: {
-        ...(baseConfig.axis ?? {}),
-        labelColor: colors.axisLabel,
-        labelFontSize: 12,
-        titleColor: colors.axisTitle,
-        titleFontWeight: 600,
+        domain: false, // Remove axis lines
+        ticks: false, // Remove tick marks
+        grid: true,
         gridColor: colors.grid,
-        tickColor: colors.tick,
+        gridDash: [4, 4], // Dashed grid lines
+        gridWidth: 1,
+        labelColor: colors.muted,
+        labelFontSize: 11,
+        labelPadding: 8,
+        titleColor: colors.text,
+        titleFontSize: 12,
+        titleFontWeight: 600,
+        titlePadding: 12,
+      },
+      axisY: {
+        grid: true,
+        domain: false,
+        ticks: false,
+      },
+      axisX: {
+        grid: false, // Usually no vertical grid for bar charts
+        domain: true,
+        domainColor: colors.border,
       },
       legend: {
-        ...(baseConfig.legend ?? {}),
-        labelColor: colors.axisLabel,
-        titleColor: colors.axisTitle,
-        labelFontSize: 12,
+        labelColor: colors.text,
+        labelFontSize: 11,
+        titleColor: colors.text,
+        titleFontSize: 12,
+        titleFontWeight: 600,
+        symbolType: 'circle',
       },
-      view: { ...(baseConfig.view ?? {}), stroke: 'transparent' },
       range: {
-        ...(baseConfig.range ?? {}),
         category: colors.range,
+        ordinal: colors.range,
+        ramp: colors.range,
+      },
+      bar: {
+        cornerRadiusEnd: 4, // Rounded bars
+      },
+      line: {
+        strokeWidth: 2,
+      },
+      point: {
+        filled: true,
+        size: 64,
       },
     };
 
+    // Enforce primary color if not specified
     const encoding = mutableSpec.encoding;
     if (encoding && !encoding.color) {
       encoding.color = { value: colors.primary };
@@ -165,8 +199,10 @@ export function VisualizationTab() {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      toast.success("Chart exported successfully");
     } catch (error) {
       console.error('Failed to export chart:', error);
+      toast.error("Failed to export chart");
     } finally {
       setIsExporting(false);
     }
@@ -202,38 +238,42 @@ export function VisualizationTab() {
   const fullscreenNode =
     isFullscreen && themedSpec && typeof document !== 'undefined'
       ? createPortal(
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-background/90 backdrop-blur"
+          onClick={() => setIsFullscreen(false)}
+        >
           <div
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-background/90 backdrop-blur"
-            onClick={() => setIsFullscreen(false)}
+            className="relative h-[min(90vh,780px)] w-[min(94vw,1200px)] rounded-2xl border border-border-subtle bg-card shadow-xl"
+            onClick={(event) => event.stopPropagation()}
           >
-            <div
-              className="relative h-[min(90vh,780px)] w-[min(94vw,1200px)] rounded-2xl border border-border-subtle bg-card shadow-xl"
-              onClick={(event) => event.stopPropagation()}
-            >
-              <div className="absolute right-4 top-4 flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => setIsFullscreen(false)}>
-                  Close
-                </Button>
-              </div>
-              <div className="h-full w-full p-6">
-                <VegaEmbed
-                  spec={themedSpec as VegaSpec}
-                  options={{ actions: false, renderer: 'svg' }}
-                  style={{ width: '100%', height: '100%' }}
-                />
-              </div>
+            <div className="absolute right-4 top-4 flex gap-2">
+              <Button variant="secondary" size="sm" onClick={() => setIsFullscreen(false)}>
+                Close
+              </Button>
             </div>
-          </div>,
-          document.body
-        )
+            <div className="h-full w-full p-6">
+              <VegaEmbed
+                spec={themedSpec as VegaSpec}
+                options={{ actions: false, renderer: 'svg' }}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </div>
+        </div>,
+        document.body
+      )
       : null;
 
   if (!themedSpec) {
     return (
-      <Card className="card-subtle">
-        <CardContent className="p-8 text-center">
-          <p className="text-sm text-muted-foreground">No visualization available. Send a query to see results.</p>
-        </CardContent>
+      <Card className="card-subtle h-full min-h-[320px] flex flex-col items-center justify-center text-center p-8">
+        <div className="rounded-full bg-primary/10 p-4 mb-4">
+          <BarChart className="h-8 w-8 text-primary/60" />
+        </div>
+        <h3 className="heading-sm mb-2 text-foreground/80">No Visualization</h3>
+        <p className="text-sm text-muted-foreground max-w-[240px]">
+          Run a query that returns data to generate a chart automatically.
+        </p>
       </Card>
     );
   }
