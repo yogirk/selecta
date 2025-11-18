@@ -7,7 +7,7 @@ import { ChatArea } from '@/components/chat/ChatArea';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { ResultsTabs } from '@/components/results/ResultsTabs';
 import { Button } from '@/components/ui/button';
-import { PanelLeftOpen } from 'lucide-react';
+import { PanelLeftOpen, Plus } from 'lucide-react';
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -21,16 +21,35 @@ export default function Home() {
           {isSidebarOpen ? (
             <SessionList onCollapse={() => setIsSidebarOpen(false)} />
           ) : (
-            <div className="hidden h-full w-14 shrink-0 items-start justify-center pt-4 lg:flex">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsSidebarOpen(true)}
-                className="mt-4 rounded-xl bg-card/70 p-2 text-muted-foreground shadow-md hover:text-foreground"
-                aria-label="Open recent sessions"
-              >
-                <PanelLeftOpen className="h-5 w-5" />
-              </Button>
+            <div className="hidden h-full w-[60px] flex-col items-center border-r border-border-subtle bg-[color:var(--card)] py-4 lg:flex">
+              <div className="mb-4 px-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="h-10 w-10 rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  aria-label="Expand sidebar"
+                >
+                  <PanelLeftOpen className="h-5 w-5" />
+                </Button>
+              </div>
+              <div className="px-2">
+                <Button
+                  onClick={() => {
+                    setIsSidebarOpen(true);
+                    // Small delay to allow sidebar to expand before triggering new session
+                    setTimeout(() => {
+                      const newSessionBtn = document.querySelector('button[aria-label="New Session"]');
+                      if (newSessionBtn instanceof HTMLElement) newSessionBtn.click();
+                    }, 100);
+                  }}
+                  size="icon"
+                  className="h-10 w-10 rounded-lg bg-primary text-primary-foreground shadow-sm hover:bg-primary/90"
+                  aria-label="New Session"
+                >
+                  <Plus className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
           )}
 

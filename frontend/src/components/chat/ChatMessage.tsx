@@ -101,9 +101,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
                     className="overflow-hidden"
                   >
                     <div className="mt-2 border-l-2 border-border-subtle pl-3 text-muted-foreground">
-                      <ReactMarkdown className="markdown text-xs">
-                        {message.thinking}
-                      </ReactMarkdown>
+                      <div className="markdown text-xs">
+                        <ReactMarkdown>
+                          {message.thinking}
+                        </ReactMarkdown>
+                      </div>
                     </div>
                   </motion.div>
                 )}
